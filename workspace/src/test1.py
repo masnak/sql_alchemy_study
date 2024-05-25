@@ -1,12 +1,8 @@
 # workspace/src/test1.py
 
-# create db session using sqlalchemy and postgresql+psycopg2 driver
-from sqlalchemy import create_engine
-from sqlalchemy.dialects.postgresql import JSON
-from sqlalchemy import Metadata
-from sqlalchemy import Table, Column, Integer, String, Numeric, ForeignKey
+from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, Numeric
 
-metadata = Metadata()
+metadata = MetaData()
 
 # create engine
 engine = create_engine('postgresql+psycopg2://docker:docker@localhost:5432/docker')
@@ -23,3 +19,6 @@ cookies = Table('cookies', metadata,
     Column('quantity', Integer()),
     Column('unit_cost', Numeric(12, 2))
 )
+
+# Create the table in the database
+metadata.create_all(engine)
