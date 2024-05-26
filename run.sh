@@ -8,7 +8,10 @@ CONTAINER_NAME="sqlalchemy_learning_container"
 
 # ホストのワークスペースディレクトリを設定
 ####!!!! 使用先のディレクトリを指定すること !!!!####
-HOST_WORKSPACE="/Users/mn/workspace/db_study/sql_alchemy_study/workspace"
+
+#HOST_WORKSPACE="/Users/mn/workspace/db_study/sql_alchemy_study/workspace"
+
+HOST_WORKSPACE="/home/mn/workspace/sql_alchemy_study/workspace"
 
 
 # コンテナ内のワークスペースディレクトリを設定
