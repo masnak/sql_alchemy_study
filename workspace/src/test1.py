@@ -1,6 +1,7 @@
 # workspace/src/test1.py
 
-from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, Numeric
+from datetime import datetime
+from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, Numeric, DateTime
 
 metadata = MetaData()
 
@@ -19,6 +20,18 @@ cookies = Table('cookies', metadata,
     Column('quantity', Integer()),
     Column('unit_cost', Numeric(12, 2))
 )
+
+users = Table('users', metadate,
+    Column('user_id', Integer(), primary_key=True),
+    Column('username', String(15), nullable=False, unique=True),
+    Column('email_address', String(255), nullable=False),
+    Column('phone', String(20), nullable=False),
+    Column('password', String(25), nullable=False),
+    Column('created_on', DateTime(), default=datetime.now),
+    Column('updated_on', DateTime(), default=datetime.now, onupdate=datetime.now)
+)
+
+
 
 # Create the table in the database
 metadata.create_all(engine)
