@@ -21,7 +21,7 @@ cookies = Table('cookies', metadata,
     Column('unit_cost', Numeric(12, 2))
 )
 
-users = Table('users', metadate,
+users = Table('users', metadata,
     Column('user_id', Integer(), primary_key=True),
     Column('username', String(15), nullable=False, unique=True),
     Column('email_address', String(255), nullable=False),
