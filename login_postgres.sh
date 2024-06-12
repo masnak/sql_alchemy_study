@@ -1,3 +1,8 @@
+# /bin/bash
+
+# login_postgres.sh
+
+
 docker exec -it sqlalchemy_learning_container su - postgres
 
 
