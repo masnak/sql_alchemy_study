@@ -1,8 +1,11 @@
+# dockerfile
+
 # ベースイメージとしてUbuntu 22.04を使用
 FROM ubuntu:22.04
 
 # 環境変数の設定
 ENV DEBIAN_FRONTEND=noninteractive
+ENV PGCLIENTENCODING=UTF8
 
 # 必要なパッケージのインストールとPython 3.11のセットアップ
 RUN apt-get update && \
@@ -33,6 +36,8 @@ RUN echo "#!/bin/bash\n\
 set -e\n\
 echo 'Updating pg_hba.conf to use trust authentication...'\n\
 sed -i \"s/peer/trust/g\" /etc/postgresql/16/main/pg_hba.conf\n\
+echo 'Updating postgresql.conf to set client_encoding to UTF8...'\n\
+echo \"client_encoding = 'UTF8'\" >> /etc/postgresql/16/main/postgresql.conf\n\
 echo 'Restarting PostgreSQL...'\n\
 service postgresql restart\n\
 sleep 5\n\
@@ -40,8 +45,8 @@ echo 'Setting password for postgres user...'\n\
 psql -U postgres -c \"ALTER USER postgres PASSWORD 'postgres';\" && echo 'Postgres password set'\n\
 echo 'Creating docker user...'\n\
 psql -U postgres -c \"CREATE USER docker WITH SUPERUSER PASSWORD 'docker';\" && echo 'Docker user created'\n\
-echo 'Creating docker database...'\n\
-createdb -U postgres -O docker docker && echo 'Docker database created'\n\
+echo 'Creating docker database with UTF8 encoding...'\n\
+psql -U postgres -c \"CREATE DATABASE docker OWNER docker ENCODING 'UTF8';\" && echo 'Docker database created with UTF8 encoding'\n\
 echo 'Updating pg_hba.conf to use md5 authentication...'\n\
 sed -i \"s/trust/md5/g\" /etc/postgresql/16/main/pg_hba.conf\n\
 echo 'Restarting PostgreSQL...'\n\
