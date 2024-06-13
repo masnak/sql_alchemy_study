@@ -17,7 +17,6 @@ HOST_WORKSPACE="/Users/mn/workspace/db_study/sql_alchemy_study/workspace"
 # My Windows
 #HOST_WORKSPACE="/home/mn/workspace/sql_alchemy_study/workspace"
 
-
 # コンテナ内のワークスペースディレクトリを設定
 CONTAINER_WORKSPACE="/workspace"
 
@@ -50,6 +49,23 @@ for i in {20..1}; do
   sleep 1
 done
 echo -e "\n接続を試みます..."
+
+# Postgresが起動するのを待つ
+echo "Postgresの起動を待っています..."
+sleep 10
+
+# srcディレクトリ内のPythonファイルを実行
+echo "srcディレクトリ内のPythonファイルを実行しています..."
+docker exec -it ${CONTAINER_NAME} bash -c "python3 ${CONTAINER_WORKSPACE}/src/create_tables.py"
+docker exec -it ${CONTAINER_NAME} bash -c "python3 ${CONTAINER_WORKSPACE}/src/seeding.py"
+
+# エラーハンドリングの追加
+if [ $? -eq 0 ]; then
+  echo "Pythonスクリプトが正常に実行されました。"
+else
+  echo "Pythonスクリプトの実行に失敗しました。" >&2
+  exit 1
+fi
 
 # コンテナにログインし、psqlを実行してデータベースに接続
 echo "コンテナにログインし、psqlを実行してデータベースに接続しています: ${CONTAINER_NAME}"
