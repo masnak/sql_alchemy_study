@@ -1,4 +1,4 @@
-# workspace/src/test1.py
+# workspace/src/create_tables.py
 
 from datetime import datetime
 from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, Numeric, DateTime
@@ -30,8 +30,6 @@ users = Table('users', metadata,
     Column('created_on', DateTime(), default=datetime.now),
     Column('updated_on', DateTime(), default=datetime.now, onupdate=datetime.now)
 )
-
-
 
 # Create the table in the database
 metadata.create_all(engine)
