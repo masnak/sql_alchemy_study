@@ -2,6 +2,7 @@
 
 from datetime import datetime
 from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, Numeric, DateTime
+from sqlalchemy import PrimaryKeyConstraint, ForeignKeyConstraint, UniqueConstraint, CheckConstraint
 
 metadata = MetaData()
 
@@ -18,7 +19,9 @@ cookies = Table('cookies', metadata,
     Column('cookie_recipe_url', String(255)),
     Column('cookie_sku', String(55)),
     Column('quantity', Integer()),
-    Column('unit_cost', Numeric(12, 2))
+    Column('unit_cost', Numeric(12, 2)),
+    UniqueConstraint('cookie_name', name='uix_cookie'),
+    CheckConstraint('unit_cost >= 0.00', name='unit_cost_positive')
 )
 
 users = Table('users', metadata,
@@ -28,7 +31,8 @@ users = Table('users', metadata,
     Column('phone', String(20), nullable=False),
     Column('password', String(25), nullable=False),
     Column('created_on', DateTime(), default=datetime.now),
-    Column('updated_on', DateTime(), default=datetime.now, onupdate=datetime.now)
+    Column('updated_on', DateTime(), default=datetime.now, onupdate=datetime.now),
+    PrimaryKeyConstraint('user_id', name='user_id_pk'),
 )
 
 # Create the table in the database
