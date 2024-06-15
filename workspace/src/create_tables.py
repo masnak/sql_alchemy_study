@@ -1,7 +1,7 @@
 # workspace/src/create_tables.py
 
 from datetime import datetime
-from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, Numeric, DateTime
+from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, Numeric, DateTime, ForeignKey, Boolean
 from sqlalchemy import PrimaryKeyConstraint, ForeignKeyConstraint, UniqueConstraint, CheckConstraint
 
 metadata = MetaData()
@@ -33,6 +33,21 @@ users = Table('users', metadata,
     Column('created_on', DateTime(), default=datetime.now),
     Column('updated_on', DateTime(), default=datetime.now, onupdate=datetime.now),
     PrimaryKeyConstraint('user_id', name='user_id_pk'),
+)
+
+orders = Table('orders', metadata,
+    Column('order_id', Integer()),
+    Column('user_id', ForeignKey('users.user_id')),
+    Column('shipped', Boolean(), default=False),
+    PrimaryKeyConstraint('order_id', name='order_id_pk')
+)
+
+line_items = Table('line_items', metadata,
+    Column('line_items_id', Integer(), primary_key=True),
+    Column('order_id', ForeignKey('orders.order_id')),
+    Column('cookie_id', ForeignKey('cookies.cookie_id')),
+    Column('quantity', Integer()),
+    Column('extended_cost', Numeric(12, 2))
 )
 
 # Create the table in the database
