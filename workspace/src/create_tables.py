@@ -1,8 +1,8 @@
 # workspace/src/create_tables.py
 
 from datetime import datetime
-from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, Numeric, DateTime, ForeignKey, Boolean
-from sqlalchemy import PrimaryKeyConstraint, ForeignKeyConstraint, UniqueConstraint, CheckConstraint
+from sqlalchemy import (create_engine, MetaData, Table, Column, Integer, String, Numeric, DateTime, ForeignKey, Boolean, PrimaryKeyConstraint, ForeignKeyConstraint, UniqueConstraint, CheckConstraint
+)
 
 metadata = MetaData()
 
@@ -26,6 +26,7 @@ cookies = Table('cookies', metadata,
 
 users = Table('users', metadata,
     Column('user_id', Integer(), primary_key=True),
+    Column('customer_number', Integer(), autoincrement=True),
     Column('username', String(15), nullable=False, unique=True),
     Column('email_address', String(255), nullable=False),
     Column('phone', String(20), nullable=False),
