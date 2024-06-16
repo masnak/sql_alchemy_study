@@ -6,7 +6,7 @@
 IMAGE_NAME="sqlalchemy_learning_env"
 
 # Dockerイメージをビルド
-docker build -t $IMAGE_NAME . --no-cache
+docker build -t $IMAGE_NAME .
 
 # ビルドが成功したことを確認するメッセージ
 if [ $? -eq 0 ]; then

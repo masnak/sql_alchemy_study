@@ -30,6 +30,7 @@ fi
 echo "新しいコンテナを作成して起動しています: ${CONTAINER_NAME}"
 docker run -d \
   --name ${CONTAINER_NAME} \
+  -e PGCLIENTENCODING=UTF8 \
   -p 5432:5432 \
   -v ${HOST_WORKSPACE}:${CONTAINER_WORKSPACE} \
   ${IMAGE_NAME}
@@ -50,14 +51,13 @@ for i in {20..1}; do
 done
 echo -e "\n接続を試みます..."
 
-# Postgresが起動するのを待つ
-echo "Postgresの起動を待っています..."
+# Postgresが起動するのを待っています
 sleep 10
 
 # srcディレクトリ内のPythonファイルを実行
 echo "srcディレクトリ内のPythonファイルを実行しています..."
-docker exec -it ${CONTAINER_NAME} bash -c "python3 ${CONTAINER_WORKSPACE}/src/create_tables.py"
-docker exec -it ${CONTAINER_NAME} bash -c "python3 ${CONTAINER_WORKSPACE}/src/seeding.py"
+docker exec -it ${CONTAINER_NAME} bash -c "export PGCLIENTENCODING=UTF8; python3 ${CONTAINER_WORKSPACE}/src/create_tables.py"
+docker exec -it ${CONTAINER_NAME} bash -c "export PGCLIENTENCODING=UTF8; python3 ${CONTAINER_WORKSPACE}/src/seeding.py"
 
 # エラーハンドリングの追加
 if [ $? -eq 0 ]; then
@@ -69,4 +69,5 @@ fi
 
 # コンテナにログインし、psqlを実行してデータベースに接続
 echo "コンテナにログインし、psqlを実行してデータベースに接続しています: ${CONTAINER_NAME}"
-docker exec -it ${CONTAINER_NAME} su - postgres -c "psql -U docker -d docker"
+docker exec -it ${CONTAINER_NAME} bash -c "export PGCLIENTENCODING=UTF8; psql -U docker -d docker -c 'SHOW CLIENT_ENCODING;'"
+docker exec -it ${CONTAINER_NAME} bash -c "export PGCLIENTENCODING=UTF8; psql -U docker -d docker"

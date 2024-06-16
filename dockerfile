@@ -71,6 +71,6 @@ WORKDIR /workspace
 EXPOSE 5432
 
 # PostgreSQLサービスの起動スクリプト
-CMD service postgresql start && sleep 5 && \
+CMD export PGCLIENTENCODING=UTF8 && service postgresql start && sleep 5 && \
     /docker-entrypoint-initdb.d/init-user-db.sh && \
     tail -f /dev/null
