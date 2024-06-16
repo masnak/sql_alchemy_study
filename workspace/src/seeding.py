@@ -4,7 +4,7 @@ from datetime import datetime
 from sqlalchemy import create_engine, insert
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import sessionmaker
-from create_tables import cookies, users
+from create_tables import cookies, users, orders, line_items
 
 # create engine
 engine = create_engine('postgresql+psycopg2://docker:docker@localhost:5432/docker', client_encoding='utf8')
@@ -43,6 +43,43 @@ try:
     session.commit()
 except SQLAlchemyError as e:
     print(f"Error inserting data into users table: {e}")
+    session.rollback()
+
+try:
+    # insert sample data into orders table
+    print("Inserting data into orders table...")
+    session.execute(insert(orders), [
+        {'order_id': 1, 'user_id': 1, 'shipped': False},
+        {'order_id': 2, 'user_id': 2, 'shipped': True},
+        {'order_id': 3, 'user_id': 3, 'shipped': False},
+        {'order_id': 4, 'user_id': 4, 'shipped': True},
+        {'order_id': 5, 'user_id': 5, 'shipped': False},
+    ])
+    print("Data inserted into orders table successfully.")
+    session.commit()
+except SQLAlchemyError as e:
+    print(f"Error inserting data into orders table: {e}")
+    session.rollback()
+
+try:
+    # insert sample data into line_items table
+    print("Inserting data into line_items table...")
+    session.execute(insert(line_items), [
+        {'line_items_id': 1, 'order_id': 1, 'cookie_id': 1, 'quantity': 5, 'extended_cost': 2.50},
+        {'line_items_id': 2, 'order_id': 1, 'cookie_id': 2, 'quantity': 3, 'extended_cost': 1.80},
+        {'line_items_id': 3, 'order_id': 2, 'cookie_id': 3, 'quantity': 2, 'extended_cost': 1.40},
+        {'line_items_id': 4, 'order_id': 2, 'cookie_id': 4, 'quantity': 4, 'extended_cost': 3.20},
+        {'line_items_id': 5, 'order_id': 3, 'cookie_id': 5, 'quantity': 1, 'extended_cost': 0.90},
+        {'line_items_id': 6, 'order_id': 3, 'cookie_id': 1, 'quantity': 6, 'extended_cost': 3.00},
+        {'line_items_id': 7, 'order_id': 4, 'cookie_id': 2, 'quantity': 2, 'extended_cost': 1.20},
+        {'line_items_id': 8, 'order_id': 4, 'cookie_id': 3, 'quantity': 3, 'extended_cost': 2.10},
+        {'line_items_id': 9, 'order_id': 5, 'cookie_id': 4, 'quantity': 4, 'extended_cost': 3.20},
+        {'line_items_id': 10, 'order_id': 5, 'cookie_id': 5, 'quantity': 5, 'extended_cost': 4.50},
+    ])
+    print("Data inserted into line_items table successfully.")
+    session.commit()
+except SQLAlchemyError as e:
+    print(f"Error inserting data into line_items table: {e}")
     session.rollback()
 finally:
     session.close()
