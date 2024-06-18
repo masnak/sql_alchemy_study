@@ -1,4 +1,8 @@
+from sqlalchemy import create_engine
 from create_tables import cookies, users, orders, line_items
+
+engine = create_engine('postgresql+psycopg2://docker:docker@localhost:5432/docker')
+connection = engine.connect()
 
 ins = cookies.insert().values(
     cookie_name="chocolate chip",
@@ -8,3 +12,5 @@ ins = cookies.insert().values(
     unit_cost="0.50"
 )
 print(str(ins))
+
+result = connection.execute(ins)
