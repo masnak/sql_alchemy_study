@@ -1,2 +1,4 @@
 # __pycache__ フォルダを無視する
 workspace/src/__pycache__/
+workspace/src/**/__pycache__/
+workspace/src/retrofun/venv/
