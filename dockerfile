@@ -62,7 +62,7 @@ ENV PATH="/opt/venv/bin:$PATH"
 
 # 必要なPythonパッケージのインストール
 RUN /opt/venv/bin/pip install --upgrade pip && \
-    /opt/venv/bin/pip install sqlalchemy psycopg2-binary
+    /opt/venv/bin/pip install sqlalchemy psycopg2-binary python-dotenv
 
 # 作業ディレクトリの作成
 WORKDIR /workspace
