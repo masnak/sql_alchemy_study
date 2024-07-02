@@ -1,5 +1,3 @@
-# dockerfile
-
 # ベースイメージとしてUbuntu 22.04を使用
 FROM ubuntu:22.04
 
@@ -23,7 +21,9 @@ RUN apt-get update && \
     git \
     vim \
     postgresql-16 \
-    postgresql-client-16
+    postgresql-client-16 \
+    openssl && \
+    apt-get upgrade -y openssl
 
 # デフォルトのPythonをPython 3.11に設定
 RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 1 && \
